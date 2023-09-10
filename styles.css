@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=REM:wght@700&display=swap');
+
+body, h1, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    text-align: center;
+    padding: 50px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.content {
+    text-align: center;
+    padding: 50px;
+    opacity: 0;
+    animation: fadeIn 1.5s forwards; 
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    animation: fadeIn 1.5s forwards;
+}
+@media screen and (max-width: 768px) {
+    .content {
+        padding: 30px;
+    }
+}
+/* Basic styling for the container and forms */
+.container {
+    position: relative;
+    perspective: 1000px;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-origin: top;
+}
+
+/* Styling for the overlay and toggle button */
+.overlay-container {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #393e46, #00adb5);
+    transition: transform 0.6s;
+    transform-origin: left;
+}
+
+/* Style the toggle button and other elements as needed */
