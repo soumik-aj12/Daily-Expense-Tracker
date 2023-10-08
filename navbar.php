@@ -4,7 +4,7 @@
         </div>
         <ul class="nav-items">
             <li><a href="index.php" class="active">Home</a></li>
-            <li><a href="login.php">Login/Signup</a></li>
+            <li><a href="form.php">Login/Signup</a></li>
             <li><a href="#">About</a></li>
         </ul>
     </nav>

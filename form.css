@@ -15,7 +15,7 @@ html {
 
 /* Body */
 body {
-  background: #c1bdba;
+  background: url('assets/img/bg.jpg');
   font-family: 'Titillium Web', sans-serif;
 }
 
@@ -32,9 +32,9 @@ a:hover {
 
 /* Form */
 .form {
-  background: #011409;
-  padding: 40px;
-  max-width: 391px;
+  background: #046834;
+  padding: 19px;
+  max-width: 330px;
   margin: 40px auto;
   border-radius: 4px;
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
@@ -44,7 +44,7 @@ a:hover {
 .tab-group {
   list-style: none;
   padding: 0;
-  margin: 0 0 40px 0;
+  margin: 0 0 15px 0;
 }
 
 .tab-group:after {
@@ -87,7 +87,7 @@ h1 {
   text-align: center;
   color: #ffffff;
   font-weight: 300;
-  margin: 0 0 40px;
+  margin: 0 0 20px;
 }
 
 /* Label */
@@ -95,9 +95,9 @@ label {
   position: absolute;
   transform: translateY(6px);
   left: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255);
   transition: all 0.25s ease;
-  -webkit-backface-visibility: hidden;
+  /* -webkit-backface-visibility: hidden; */
   pointer-events: none;
   font-size: 17px;
 }
@@ -108,9 +108,9 @@ label .req {
 }
 
 label.active {
-  transform: translateY(50px);
+  transform: translateY(42px);
   left: 2px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 label.active .req {
@@ -152,7 +152,7 @@ textarea {
 /* Field Wrap */
 .field-wrap {
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 
 /* Top Row */
@@ -191,6 +191,7 @@ textarea {
 .button:hover,
 .button:focus {
   background: #0f7c63;
+  cursor: pointer;
 }
 
 /* Button Block */
