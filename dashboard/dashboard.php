@@ -161,7 +161,7 @@ if (isset($_SESSION['id'])) {
             }
         }
     </style>
-    <title>Admin Dashboard Panel</title>
+    <title>Daily Expense Tracker</title>
 </head>
 
 <body class="bg-gray">
@@ -222,25 +222,28 @@ if (isset($_SESSION['id'])) {
         // Initialize an associative array to store monthly totals
         $dailyExpenses = array();
         $monthlyExpensesData = array();
-
-        // Process the data
-        while ($row = mysqli_fetch_assoc($result)) {
-            $expenseAmount = $row['expense_amount'];
-            $expenseDate = strtotime($row['date_added']);
-            $dayMonthYear = date('d M Y', $expenseDate);
-            $monthYear = date('M Y', $expenseDate);
-            if (isset($monthlyExpensesData[$monthYear])) {
-                $monthlyExpensesData[$monthYear] += $expenseAmount;
-            } else {
-                $monthlyExpensesData[$monthYear] = $expenseAmount;
-            }
-            // Add the expense amount to the corresponding day
-            if (isset($dailyExpenses[$dayMonthYear])) {
-                $dailyExpenses[$dayMonthYear] += $expenseAmount;
-            } else {
-                $dailyExpenses[$dayMonthYear] = $expenseAmount;
+        $num = 0;
+        if($result){
+            $num = mysqli_num_rows($result);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $expenseAmount = $row['expense_amount'];
+                $expenseDate = strtotime($row['date_added']);
+                $dayMonthYear = date('d M Y', $expenseDate);
+                $monthYear = date('M Y', $expenseDate);
+                if (isset($monthlyExpensesData[$monthYear])) {
+                    $monthlyExpensesData[$monthYear] += $expenseAmount;
+                } else {
+                    $monthlyExpensesData[$monthYear] = $expenseAmount;
+                }
+                // Add the expense amount to the corresponding day
+                if (isset($dailyExpenses[$dayMonthYear])) {
+                    $dailyExpenses[$dayMonthYear] += $expenseAmount;
+                } else {
+                    $dailyExpenses[$dayMonthYear] = $expenseAmount;
+                }
             }
         }
+        // Process the data
 
         // Create an array to store all days
         $allDays = array();
@@ -285,7 +288,15 @@ if (isset($_SESSION['id'])) {
                 <i class="uil uil-tachometer-fast-alt"></i>
                 <span class="text">Dashboard</span>
             </div>
-
+        <?php 
+        if($num==0){
+            echo '
+            <div class="title">
+                <span class="text">No Expenses yet!</span>
+            </div>';
+        }
+        else{
+            echo '
             <div class="chart-container">
                 <div class="chart">
                     <canvas id="dailyExpenseBarChart" width="400" height="200"></canvas>
@@ -294,6 +305,10 @@ if (isset($_SESSION['id'])) {
                     <canvas id="monthlyExpenseLineChart" width="400" height="200"></canvas>
                 </div>
             </div>
+            ';
+        }
+
+        ?>
             <div class="title">
                 <i class="uil uil-clock-three"></i>
                 <span class="text">Last Three Expenses</span>

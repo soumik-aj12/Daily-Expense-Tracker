@@ -13,7 +13,16 @@ include 'connectDB.php';
 </head>
 
 <body style="margin:0;">
-    <?php include "navbar.php"; ?>
+<nav class="navbar">
+        <div class="logo">
+            <a href="#">Daily Expense Tracker</a>
+        </div>
+        <ul class="nav-items">
+            <li><a href="index.php">Home</a></li>
+            <li><a href="form.php" class="active">Login/Signup</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+</nav>
 
     <div class="form">
 
@@ -42,10 +51,10 @@ include 'connectDB.php';
                         <input type="password" required name='log_pass' autocomplete="off" />
                     </div>
                     <div class="field-wrap" id='captcha'>
-                        <div class="g-recaptcha" data-sitekey="6Ld6qPYnAAAAAIfs-CyStFk-fDF0l5q_NTml0TuD"></div>
+                        <div class="g-recaptcha" data-sitekey="6LdJChcoAAAAAKoLQFs5IkQ6sH3wWMr6OhU7le4-"></div>
                         <?php
                         if (isset($_GET['captcha'])) {
-                            echo "<p style='color:red;'>Please verify the captcha!</p>";
+                            echo "<span style='color:red;'>Please verify the captcha!</span>";
                             unset($_GET['captcha']);
                         }
                         ?>

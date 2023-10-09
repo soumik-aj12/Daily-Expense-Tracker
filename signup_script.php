@@ -5,7 +5,7 @@ if(isset($_POST['sign_sub'])){
     $cpass = $_POST['cpass'];
 if($pass != $cpass)
 {
-    header("Location: form.php?error=error2");
+    header("Location: form.php#signup?error=error2");
 }
     else
     {
@@ -13,23 +13,26 @@ if($pass != $cpass)
         $sql = "SELECT * FROM users where email='$email';";
         $num = mysqli_num_rows(mysqli_query($con, $sql));
         if($num==1){
-        header("Location: form.php?error=error1");
+        header("Location: form.php#signup?error=error1");
         }
         else{
             $id = $_POST['id'];
-            $fname = $_POST['fname'];
-            $lname = $_POST['lname'];
+            $fname = mysqli_real_escape_string($con, $_POST['fname']);
+            $lname = mysqli_real_escape_string($con, $_POST['lname']);
+            
+            // Hash the password securely
+            $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
             if(isset($_POST['phone'])){
                 $phone = $_POST['phone'];
-                $sql = "insert into users (fname,lname,email,phone,password) values ('$fname','$lname','$email','$phone','$password');";
+                $sql_ins = "insert into users (fname,lname,email,phone,password) values ('$fname','$lname','$email','$phone','$hashedPassword');";
             }
             else 
-            $sql = "insert into users (fname,lname,email,password) values ('$fname','$lname','$email','$password');";
+            $sql_ins = "insert into users (fname,lname,email,password) values ('$fname','$lname','$email','$hashedPassword');";
            
             // echo $name;
             // echo $email;
             // echo $pass;
-            $result = mysqli_query($con,$sql);
+            $result_ins = mysqli_query($con,$sql_ins);
             session_start();
             $_SESSION['id'] = $id;
             echo "<script>window.location.href='dashboard/dashboard.php';</script>";

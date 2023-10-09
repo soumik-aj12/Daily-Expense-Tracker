@@ -8,11 +8,11 @@ if (isset($_POST['g-recaptcha-response'])) {
 
     $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$captcha");
     $responseKeys = json_decode($response, true);
-
+    // print_r($responseKeys);
     // Check if the response is valid
     if (intval($responseKeys["success"]) !== 1) {
         // reCAPTCHA verification failed, handle accordingly (e.g., show an error message).
-        header("Location: login.php?captcha=false");
+         header("Location: form.php#login?captcha=false");
     }
     else{
         unset($_POST['g-recaptcha-response']);

@@ -26,7 +26,7 @@ if (isset($_SESSION['id'])) {
 
     <!----===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-    <title>Admin Dashboard Panel</title>
+    <title>Daily Expense Tracker</title>
 </head>
 
 <body>
@@ -128,7 +128,7 @@ if (isset($_SESSION['id'])) {
                                             </button>
                                         </header>
                                         <section class="modal-content">
-                                            <div>Are you sure you want to delete this expense?</div>
+                                            <div style="margin-bottom: 20px;">Are you sure you want to delete this expense?</div>
                                             <form action="delete_exp.php" method="post">
                                                 <input type="hidden" name="expense_id" value="' . $row['expense_id'] . '">
                                                 <button type="submit" name="delete_button" class="del">Yes</button>

@@ -23,7 +23,9 @@
     --tran-03: all 0.3s ease;
     --tran-03: all 0.2s ease;
 }
-
+body {
+    overflow-x: hidden; 
+   }
 body.dark {
     --primary-color: #27ae60;
     --panel-color: #242526;
@@ -409,7 +411,7 @@ nav.close ~ .dashboard .top{
     color: var(--text-color);
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1300px) {
     nav{
         width: 73px;
     }
@@ -450,6 +452,9 @@ nav.close ~ .dashboard .top{
     }
     .activity .activity-data{
         overflow-X: scroll;
+    }
+    .chart-container{
+        flex-direction: flex-direction;
     }
 }
 
@@ -513,7 +518,7 @@ nav.close ~ .dashboard .top{
   
   th, td {
     padding: 8px;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid #ddd;
   }
   
