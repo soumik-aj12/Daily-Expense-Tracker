@@ -4,13 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            background: url('assets/img/bg.jpg');
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/index.css">
 
     <title>Daily Expense Tracker</title>
 </head>

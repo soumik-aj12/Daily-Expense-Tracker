@@ -18,9 +18,12 @@ if (isset($_SESSION['id'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../assets/js/popup.js"></script>
 
     <!----======== CSS ======== -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
+
 
     <!----===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -70,7 +73,12 @@ if (isset($_SESSION['id'])) {
             border: none;
             border-radius: 5px;
             text-decoration: none;
-            margin-top: 20px;
+        }
+
+        .edit-profile-btn {
+            margin: 5px;
+            font-size: 1rem;
+            font-weight: 600;
         }
 
         .profile-info .edit-profile-btn:hover {
@@ -89,7 +97,9 @@ if (isset($_SESSION['id'])) {
                 <img src="images/logo.png" alt="">
             </div>
 
-            <span class="logo_name"><?php echo $row['fname']; ?></span>
+            <span class="logo_name">
+                <?php echo $row['fname']; ?>
+            </span>
         </div>
 
         <div class="menu-items">
@@ -135,7 +145,7 @@ if (isset($_SESSION['id'])) {
         </div>
 
         <div class="dash-content profile-info">
-        <?php
+            <?php
             $id = $_SESSION['id'];
 
             $sql = "SELECT * FROM users WHERE id = '$id'";
@@ -147,6 +157,9 @@ if (isset($_SESSION['id'])) {
                 $fname = $row['fname'];
                 $lname = $row['lname'];
                 $email = $row['email'];
+                $phone = 0;
+                if (!empty($row['phone']))
+                    $phone = $row['phone'];
                 $totalExpenses = 0;
                 $sql = "SELECT SUM(expense_amount) AS total_expenses FROM expenses WHERE user_id = '$id'";
                 $result = mysqli_query($con, $sql);
@@ -158,26 +171,113 @@ if (isset($_SESSION['id'])) {
 
                     // Output the total expenses
                 }
-
-                echo '<h2>User Profile</h2>';
+                echo '
+                <div class="modal" id="modal_del_user" data-animation="slideInOutLeft">
+                                    <div class="modal-dialog">
+                                        <header class="modal-header">
+                                            <h3>Delete Expense</h3>
+                                            <button class="close-modal" aria-label="close modal" data-close>
+                                                ✕
+                                            </button>
+                                        </header>
+                                        <section class="modal-content">
+                                            <div style="margin-bottom: 20px;">Are you sure you want to delete this account?</div>
+                                            <div class="form-div">
+                                            <form action="delete_user.php" method="post">
+                                                <input type="hidden" name="delete-user-id" value="' . $id . '">
+                                                <button type="submit" class="btn" name="delete-user-btn">Yes</button>
+                                                </form>
+                                                <button class="close-modal" aria-label="close modal" data-close>
+                                                No
+                                            </button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                ';
+                echo '
+                <div class="modal" id="modal_upd_user" data-animation="slideInOutLeft">
+                            <div class="modal-dialog">
+                                <header class="modal-header">
+                                    <h3>Update User</h3>
+                                    <button class="close-modal" aria-label="close modal" data-close>
+                                        ✕
+                                    </button>
+                                </header>
+                                <section class="modal-content">
+                                <div class="form-div">
+                                    <form action="update_user.php" method="post">
+                                        <div class="input-group">
+                                            <label for="expense-name">User Name</label>
+                                            <input type="text" value="' . $fname . " " . $lname . '" disabled>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" id="email" name="email" value="' . $email . '"required>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="phone">Phone</label>';
+                if ($phone != 0) {
+                    echo '<input type="number" id="phone" name="phone" value="' . $phone . '" required>';
+                }
+                echo '</div>
+                                        
+                                        <input type="hidden" name="update-user-id" value="' . $id . '">
+                                        <button type="submit" class="btn" name="update-user-btn">Update User</button>
+                                    </form>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                ';
+                echo '<h2 id="profile-head">User Profile</h2>';
                 echo '<div class="profile-info">';
                 echo '<p><strong>Username:</strong> ' . $fname . ' ' . $lname . '</p>';
                 echo '<p><strong>Email:</strong> ' . $email . '</p>';
-                if ($totalExpenses == 0) echo '<p><strong>No Expenses yet.</strong></p>';
-                else echo '<p><strong>Total Expenses:</strong> ₹ ' . $totalExpenses . '</p>';
-
-                echo '<a class="edit-profile-btn" href="#">Edit Profile</a>';
+                if ($phone != 0)
+                    echo '<p><strong>Phone:</strong> ' . $phone . '</p>';
+                if ($totalExpenses == 0)
+                    echo '<p><strong>No Expenses yet.</strong></p>';
+                else
+                    echo '<p><strong>Total Expenses:</strong> ₹ ' . $totalExpenses . '</p>';
+                echo '<button class="edit-profile-btn open-modal" data-open="modal_upd_user"">Edit Profile</button>';
+                echo '
+                <button type="submit" class="edit-profile-btn open-modal" data-open="modal_del_user">Delete Profile</button>';
                 echo '</div>';
             } else {
                 echo "User not found.";
             }
 
-            ?>            
-
+            ?>
         </div>
     </section>
+    <?php if (isset($_GET['message']) && $_GET['message'] == "exists") { ?>
+        <script>
+            console.log("dhsahd")
+            swal({
+                title: "Email already exists!",
+                icon: "error",
+                button: "Okay!",
+            });
+        </script>
+        <?php
+        unset($_GET['message']);
+    } ?>
 
-    <script src="script.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('message')) {
+            setTimeout(() => {
+                urlParams.delete('message');
+                const newUrl = window.location.pathname + urlParams.toString();
+                window.history.replaceState({}, document.title, newUrl);
+            }, 5000);
+        }
+    </script>
+    <script src="../assets/js/popup.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/modal.js"></script>
+
 </body>
 
 </html>

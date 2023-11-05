@@ -6,27 +6,24 @@ if (isset($_SESSION['id'])) {
     $sql = "SELECT * from `users` where id = '$id'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);
-    // print_r($row);
+    $fname = $row['fname'];
 } else {
-    echo "<script>window.location.href='../login.php';</script>";
+    echo "<script>window.location.href='../form.php';</script>";
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="https://www.google.com/jsapi"></script>
-    <script src="chart.js"></script>
+
+    <script src="../assets/js/chart.js"></script>
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!----======== CSS ======== -->
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
 
     <!----===== Iconscout CSS ===== -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -68,15 +65,6 @@ if (isset($_SESSION['id'])) {
         .dash-content .title {
             margin: 10px;
         }
-
-
-        /* #daily_expenses_chart_div,
-        #monthly_expenses_chart_div {
-            border: 2px solid #27ae60;
-            padding: 20px;
-            border-radius: 5px;
-            width: 100%;
-        } */
 
         .chart-container {
             display: flex;
@@ -142,8 +130,8 @@ if (isset($_SESSION['id'])) {
             }
 
             /*
-	Label the data
-	*/
+    Label the data
+    */
             td:nth-of-type(1):before {
                 content: "Product Name";
             }
@@ -171,7 +159,9 @@ if (isset($_SESSION['id'])) {
                 <img src="images/logo.png" alt="">
             </div>
 
-            <span class="logo_name"><?php echo $row['fname']; ?></span>
+            <span class="logo_name">
+                <?php echo $fname; ?>
+            </span>
         </div>
 
         <div class="menu-items">
@@ -223,28 +213,30 @@ if (isset($_SESSION['id'])) {
         $dailyExpenses = array();
         $monthlyExpensesData = array();
         $num = 0;
-        if($result){
+        if ($result) {
             $num = mysqli_num_rows($result);
-            while ($row = mysqli_fetch_assoc($result)) {
-                $expenseAmount = $row['expense_amount'];
-                $expenseDate = strtotime($row['date_added']);
-                $dayMonthYear = date('d M Y', $expenseDate);
-                $monthYear = date('M Y', $expenseDate);
-                if (isset($monthlyExpensesData[$monthYear])) {
-                    $monthlyExpensesData[$monthYear] += $expenseAmount;
-                } else {
-                    $monthlyExpensesData[$monthYear] = $expenseAmount;
-                }
-                // Add the expense amount to the corresponding day
-                if (isset($dailyExpenses[$dayMonthYear])) {
-                    $dailyExpenses[$dayMonthYear] += $expenseAmount;
-                } else {
-                    $dailyExpenses[$dayMonthYear] = $expenseAmount;
+            if ($num != 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $expenseAmount = $row['expense_amount'];
+                    $expenseDate = strtotime($row['date_added']);
+                    $dayMonthYear = date('d M Y', $expenseDate);
+                    $monthYear = date('M Y', $expenseDate);
+                    if (isset($monthlyExpensesData[$monthYear])) {
+                        $monthlyExpensesData[$monthYear] += $expenseAmount;
+                    } else {
+                        $monthlyExpensesData[$monthYear] = $expenseAmount;
+                    }
+                    // Add the expense amount to the corresponding day
+                    if (isset($dailyExpenses[$dayMonthYear])) {
+                        $dailyExpenses[$dayMonthYear] += $expenseAmount;
+                    } else {
+                        $dailyExpenses[$dayMonthYear] = $expenseAmount;
+                    }
                 }
             }
         }
         // Process the data
-
+        
         // Create an array to store all days
         $allDays = array();
         $allMonths = array();
@@ -265,7 +257,7 @@ if (isset($_SESSION['id'])) {
         // Fill in zero expenses for days with no data
         $allDays = array_unique($allDays);
         sort($allDays);
-
+        $dataArray_day[] = [];
         // Create a data array with all days and their respective expenses
         foreach ($allDays as $day) {
             $expense = isset($dailyExpenses[$day]) ? $dailyExpenses[$day] : 0;
@@ -288,15 +280,15 @@ if (isset($_SESSION['id'])) {
                 <i class="uil uil-tachometer-fast-alt"></i>
                 <span class="text">Dashboard</span>
             </div>
-        <?php 
-        if($num==0){
-            echo '
-            <div class="title">
-                <span class="text">No Expenses yet!</span>
+            <?php
+            if ($num == 0) {
+                echo '
+            <div class="if-no-exp ">
+                <span class="text"><strong>Welcome, ' . $fname . '!</strong></span>
+                <div class="text">No Expenses yet. If you wish to add an expense. Please go to the Expense page :)</div>
             </div>';
-        }
-        else{
-            echo '
+            } else {
+                echo '
             <div class="chart-container">
                 <div class="chart">
                     <canvas id="dailyExpenseBarChart" width="400" height="200"></canvas>
@@ -306,21 +298,23 @@ if (isset($_SESSION['id'])) {
                 </div>
             </div>
             ';
-        }
+            }
 
-        ?>
-            <div class="title">
-                <i class="uil uil-clock-three"></i>
-                <span class="text">Last Three Expenses</span>
-            </div>
-            <div class="table-container">
-                <?php
-                $sql = "SELECT * FROM expenses WHERE user_id = '$id' ORDER BY expense_id DESC LIMIT 3";
+            ?>
+            <?php
+            $sql = "SELECT * FROM expenses WHERE user_id = '$id' ORDER BY expense_id DESC LIMIT 3";
 
-                $result = mysqli_query($con, $sql);
+            $result = mysqli_query($con, $sql);
 
-                if (mysqli_num_rows($result) > 0) {
-                    echo '<table>
+            if (mysqli_num_rows($result) > 0) {
+                echo '<div class="title">
+                            <i class="uil uil-clock-three"></i>
+                            <span class="text">Last Three Expenses</span>
+                        </div>
+                <div class="table-container">
+                    
+                    
+                    <table>
             <thead>
                 <tr>
                     <th>Product Name</th>
@@ -331,35 +325,33 @@ if (isset($_SESSION['id'])) {
             </thead>
             <tbody>';
 
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $expenseName = $row['expense_name'];
-                        $expenseType = $row['expense_type'];
-                        $expenseAmount = $row['expense_amount'];
-                        $date_added = $row['date_added'];
-                        echo '<tr>
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $expenseName = $row['expense_name'];
+                    $expenseType = $row['expense_type'];
+                    $expenseAmount = $row['expense_amount'];
+                    $date_added = $row['date_added'];
+                    echo '<tr>
                 <td>' . $expenseName . '</td>
                 <td>' . $expenseType . '</td>
                 <td>₹ ' . $expenseAmount . '</td>
                 <td>' . $date_added . '</td>
               </tr>';
-                    }
-
-                    echo '</tbody></table>';
-                } else {
-                    echo "No expenses found.";
                 }
 
-                ?>
-            </div>
+                echo '</tbody></table>';
+            }
+
+            ?>
+        </div>
 
         </div>
     </section>
     <script type="text/javascript">
         var dataJsonDay = <?php echo $dataJson_day; ?>;
-        var labelsDay = dataJsonDay.map(function(item) {
+        var labelsDay = dataJsonDay.map(function (item) {
             return item[0];
         });
-        var valuesDay = dataJsonDay.map(function(item) {
+        var valuesDay = dataJsonDay.map(function (item) {
             return item[1];
         });
 
@@ -399,8 +391,8 @@ if (isset($_SESSION['id'])) {
                     mode: 'index',
                     bodyFontSize: 12, // Increase the font size of the tooltip text
                     callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': $' + context.parsed.y;
+                        label: function (context) {
+                            return context.dataset.label + ': ₹' + context.parsed.y;
                         }
                     }
                 }
@@ -415,13 +407,13 @@ if (isset($_SESSION['id'])) {
         });
 
         var dataJsonMonth = <?php echo $dataJson_month; ?>;
-        dataJsonMonth.sort(function(a, b) {
+        dataJsonMonth.sort(function (a, b) {
             return new Date(a[0]) - new Date(b[0]);
         });
-        var labelsMonth = dataJsonMonth.map(function(item) {
+        var labelsMonth = dataJsonMonth.map(function (item) {
             return item[0];
         });
-        var valuesMonth = dataJsonMonth.map(function(item) {
+        var valuesMonth = dataJsonMonth.map(function (item) {
             return item[1];
         });
 
@@ -463,8 +455,8 @@ if (isset($_SESSION['id'])) {
                     mode: 'index',
                     bodyFontSize: 12, // Increase the font size of the tooltip text
                     callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': $' + context.parsed.y;
+                        label: function (context) {
+                            return context.dataset.label + ': ₹' + context.parsed.y;
                         }
                     }
                 }
@@ -477,7 +469,7 @@ if (isset($_SESSION['id'])) {
             data: dataMonth,
             options: optionsMonth
         });
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             monthlyExpenseLineChart.resize();
             console.log('Window resized');
             dailyExpenseBarChart.resize();

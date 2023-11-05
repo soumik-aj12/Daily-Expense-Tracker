@@ -19,7 +19,7 @@ if (isset($_POST['g-recaptcha-response'])) {
         if (isset($_POST['log_sub'])) {
             $email = $_POST['log_email'];
             $password = $_POST['log_pass'];
-            print_r($email);
+            // print_r($email);
             // print_r($password);
             $sql = "SELECT * FROM `users` where `email`='$email' and `password` ='$password';";
             $result = mysqli_query($con, $sql);

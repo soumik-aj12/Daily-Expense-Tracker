@@ -6,6 +6,7 @@ if (isset($_SESSION['id'])) {
     $sql = "SELECT * from `users` where id = '$id'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);
+    $expenseLimit = $row['expense_limit'];
     // print_r($row);
 } else {
     echo "<script>window.location.href='../login.php';</script>";
@@ -20,8 +21,8 @@ if (isset($_SESSION['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!----======== CSS ======== -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/modal.css">
 
 
     <!----===== Iconscout CSS ===== -->
@@ -78,27 +79,57 @@ if (isset($_SESSION['id'])) {
     <section class="dashboard">
         <div class="top">
             <i class="uil uil-bars sidebar-toggle"></i>
-
             <img src="images/profile.jpg" alt="">
         </div>
 
-        <div class="dash-content">
+        <div class="dash-content" id="add-expense">
             <div class="overview">
                 <div class="activity add_expenses">
                     <?php include 'add_expenses.php' ?>
-                </div>
-                <div class="activity">
-                    <div class="title">
-                        <i class="uil uil-rupee-sign"></i>
-                        <span class="text">Expenses</span>
-                    </div>
 
-                    <div class="table-container">
-                        <?php
-                        $sql = "SELECT * FROM expenses WHERE user_id = '$id'";
-                        $result = mysqli_query($con, $sql);
-                        if (mysqli_num_rows($result) > 0) {
-                            echo '<table>
+                    <button type="button" class="edit-profile-btn open-modal" data-open="modal_exp_limit">Set Expense Limit</button>
+                    
+                    <?php
+                    if ($expenseLimit != NULL) echo '<div style="color:#2ecc71;font-weight:bold;padding-left:5px;">Current Expense limit:- ₹' . $expenseLimit . '</div>';
+                    else echo '<div style="color:red;font-weight:bold;padding-left:5px;">No limit set yet!</div>';
+                    echo '
+           <div class="modal" id="modal_exp_limit" data-animation="slideInOutLeft">
+               <div class="modal-dialog">
+                   <header class="modal-header">
+                       Update Expense
+                       <button class="close-modal" aria-label="close modal" data-close>
+                           ✕
+                       </button>
+                   </header>
+                   <section class="modal-content">
+                       <form action="set_exp_limit.php" method="post">
+                           <div class="input-group">
+                               <label for="expense-name">Expense Limit</label>
+                               
+                               <input type="number" id="expense-name" name="expense_limit"required>
+                           </div>
+                           <input type="hidden" name="id" value="' . $id . '">
+                           <button type="submit" name="expense_lim_btn">Update Expense</button>
+                       </form>
+                   </section>
+               </div>
+           </div>
+   ';
+                    ?>
+                </div>
+
+                <div class=" activity">
+                    <?php
+                    $sql = "SELECT * FROM expenses WHERE user_id = '$id'";
+                    $result = mysqli_query($con, $sql);
+                    if (mysqli_num_rows($result) > 0) {
+                        echo '<div class="title">
+                            <i class="uil uil-rupee-sign"></i>
+                            <span class="text">Expenses</span>
+                        </div>
+    
+                        <div class="table-container">
+                            <table>
                         <thead>
                             <tr>
                                 <th>Product Name</th>
@@ -110,15 +141,15 @@ if (isset($_SESSION['id'])) {
                         </thead>
                         <tbody>';
 
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                $expense_Id = $row['expense_id'];
-                                $expenseName = $row['expense_name'];
-                                $expenseType = $row['expense_type'];
-                                $expenseAmount = $row['expense_amount'];
-                                $date_added = $row['date_added'];
-                                // Delete expense Modal(Also getting the expense id to delete that expense)
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $expense_Id = $row['expense_id'];
+                            $expenseName = $row['expense_name'];
+                            $expenseType = $row['expense_type'];
+                            $expenseAmount = $row['expense_amount'];
+                            $date_added = $row['date_added'];
+                            // Delete expense Modal(Also getting the expense id to delete that expense)
 
-                                echo '
+                            echo '
                                 <div class="modal" id="modal_' . $expense_Id . '"data-animation="slideInOutLeft">
                                     <div class="modal-dialog">
                                         <header class="modal-header">
@@ -141,8 +172,8 @@ if (isset($_SESSION['id'])) {
                                 </div>
                         ';
 
-                                // Update expense Modal(Also getting the expense id to delete that expense)
-                                echo '
+                            // Update expense Modal(Also getting the expense id to delete that expense)
+                            echo '
                         <div class="modal" id="modal3_' . $expense_Id . '" data-animation="slideInOutLeft">
                             <div class="modal-dialog">
                                 <header class="modal-header">
@@ -173,7 +204,7 @@ if (isset($_SESSION['id'])) {
                         </div>
                 ';
 
-                                echo '<tr>
+                            echo '<tr>
                         <td>' . $expenseName . '</td>
                         <td>' . $expenseType . '</td>
                         <td>₹ ' . $expenseAmount . '</td>
@@ -189,24 +220,27 @@ if (isset($_SESSION['id'])) {
                       </div>
                         </td>
                      </tr>';
-                            }
-
-                            echo '</tbody></table>';
-                        } else {
-                            echo "No expenses found.";
                         }
 
-                        ?>
-                    </div>
-                </div>
+                        echo '</tbody></table>';
+                    } else {
 
+                        echo '<div class="if-no-exp ">
+                        <div class="text"><strong>No Expenses yet :(</strong></div>
+                    </div>';
+                    }
+
+                    ?>
+                </div>
             </div>
+
+        </div>
         </div>
 
     </section>
 
-    <script src="script.js"></script>
-    <script src="modal.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/modal.js"></script>
 
 </body>
 

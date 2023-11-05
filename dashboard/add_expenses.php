@@ -24,6 +24,21 @@
                         <label for="expense-amount">Expense Amount ($)</label>
                         <input type="number" id="expense-amount" name='expense_amount' required>
                     </div>
+                    <?php
+                    $today = date("Y-m-d");
+                    $sql_warning = "SELECT SUM(expense_amount) AS total_expense FROM expenses WHERE user_id = '$id' AND date_added = '$today'";
+                    $result_warning = mysqli_query($con, $sql_warning);
+                    $row_warning = mysqli_fetch_assoc($result_warning);
+                    $todayExpense = $row_warning['total_expense'];
+                    $remainingLimit = $expenseLimit - $todayExpense;
+                    if($remainingLimit < 0){
+                        echo '<div style="color:red;font-weight:bold;">You have crossed your expense limit!</div>';
+                    }
+                    else if ($remainingLimit < 100) {
+                        echo '<div style="color:red;font-weight:bold">You are close to your expense limit!</div>';
+                    }
+
+                    ?>
                     <button type="submit" class="btn">Add Expense</button>
                 </form>
             </section>
