@@ -20,11 +20,10 @@ if (isset($_POST['confirm_email'])) {
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);
     if ($row == 0) {
-        header("Location: form.php?email=nein");
+        header("Location: form.php?message=4004");
     } else {
         $pass = $row['password'];
         include 'password.php';
-        $otp_generated = rand(99999, 100000);
         $mail = new PHPMailer();
 
 try {

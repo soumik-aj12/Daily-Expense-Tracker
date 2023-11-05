@@ -122,7 +122,7 @@ include 'connectDB.php';
                         </label>
                         <input type="email" required name='sign_email' />
                         <?php
-                        if (isset($_GET['error']) && $_GET['error'] == "error1"){
+                        if (isset($_GET['error']) && $_GET['error'] == "error1") {
                             echo '<script>
                             document.getElementById("login").style.display = "none";
                             document.getElementById("signup").style.display = "block";
@@ -156,7 +156,7 @@ include 'connectDB.php';
                         </label>
                         <input type="password" required autocomplete="off" name='cpass' />
                         <?php
-                        if (isset($_GET['error']) && $_GET['error'] == "error2"){
+                        if (isset($_GET['error']) && $_GET['error'] == "error2") {
                             echo '<script>
                             document.getElementById("login").style.display = "none";
                             document.getElementById("signup").style.display = "block";
@@ -179,6 +179,17 @@ include 'connectDB.php';
             swal({
                 title: "An email has been sent!",
                 icon: "success",
+                button: "Okay!",
+            });
+        </script>
+        <?php unset($_GET['message']);
+    } ?>
+
+    <?php if (isset($_GET['message']) && $_GET['message'] == 4004) { ?>
+        <script>
+            swal({
+                title: "Email doesn't exist!",
+                icon: "error",
                 button: "Okay!",
             });
         </script>
@@ -208,9 +219,9 @@ include 'connectDB.php';
             if (password.value.length < 8) {
                 error.style.color = 'red';
                 error.textContent = 'Password must be at least 8 characters long!';
-                    document.getElementById('pwd').textContent = "";
-                    document.querySelector('#sign_sub').disabled = true;
-                    
+                document.getElementById('pwd').textContent = "";
+                document.querySelector('#sign_sub').disabled = true;
+
             } else {
                 error.textContent = '';
                 document.getElementById('pwd').textContent = "Password";

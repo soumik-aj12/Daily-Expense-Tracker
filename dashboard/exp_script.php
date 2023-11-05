@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date_added = date("Y-m-d");
     $sql = "INSERT INTO expenses (user_id, expense_name, expense_type, expense_amount, date_added) 
             VALUES ('$id', '$expenseName', '$expenseType', '$expenseAmount','$date_added');";
-    echo $sql;
+    // echo $sql;
     $result = mysqli_query($con, $sql);
 
     if ($result) {

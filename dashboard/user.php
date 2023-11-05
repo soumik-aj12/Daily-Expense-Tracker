@@ -208,12 +208,12 @@ if (isset($_SESSION['id'])) {
                                 <div class="form-div">
                                     <form action="update_user.php" method="post">
                                         <div class="input-group">
-                                            <label for="expense-name">User Name</label>
-                                            <input type="text" value="' . $fname . " " . $lname . '" disabled>
+                                            <label for="expense-name">First Name</label>
+                                            <input type="text" name="fname" value="' . $fname . '">
                                         </div>
                                         <div class="input-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" id="email" name="email" value="' . $email . '"required>
+                                            <label for="expense-name">Last Name</label>
+                                            <input type="text" name="lname" value="' . $lname . '">
                                         </div>
                                         <div class="input-group">
                                             <label for="phone">Phone</label>';
@@ -251,12 +251,11 @@ if (isset($_SESSION['id'])) {
             ?>
         </div>
     </section>
-    <?php if (isset($_GET['message']) && $_GET['message'] == "exists") { ?>
+    <?php if (isset($_GET['message']) && $_GET['message'] == 6006) { ?>
         <script>
-            console.log("dhsahd")
             swal({
-                title: "Email already exists!",
-                icon: "error",
+                title: "Details Updated!",
+                icon: "success",
                 button: "Okay!",
             });
         </script>

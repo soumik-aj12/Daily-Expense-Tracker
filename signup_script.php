@@ -17,8 +17,12 @@ if($pass != $cpass)
         }
         else{
             $id = $_POST['id'];
-            $fname = mysqli_real_escape_string($con, $_POST['fname']);
-            $lname = mysqli_real_escape_string($con, $_POST['lname']);
+            function sanitize_uname($data) {
+                $data = filter_var($data, FILTER_SANITIZE_STRING);
+                return $data;
+            }
+            $fname = mysqli_real_escape_string($con, sanitize_uname($_POST['fname']));
+            $lname = mysqli_real_escape_string($con, sanitize_uname($_POST['lname']));
             if(isset($_POST['phone'])){
                 $phone = $_POST['phone'];
                 $sql_ins = "insert into users (fname,lname,email,phone,password) values ('$fname','$lname','$email','$phone','$pass');";
