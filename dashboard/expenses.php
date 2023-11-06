@@ -37,7 +37,9 @@ if (isset($_SESSION['id'])) {
                 <img src="images/logo.png" alt="">
             </div>
 
-            <span class="logo_name"><?php echo $row['fname']; ?></span>
+            <span class="logo_name">
+                <?php echo $row['fname']; ?>
+            </span>
         </div>
 
         <div class="menu-items">
@@ -87,11 +89,14 @@ if (isset($_SESSION['id'])) {
                 <div class="activity add_expenses">
                     <?php include 'add_expenses.php' ?>
 
-                    <button type="button" class="edit-profile-btn open-modal" data-open="modal_exp_limit">Set Expense Limit</button>
-                    
+                    <button type="button" class="edit-profile-btn open-modal" data-open="modal_exp_limit">Set Expense
+                        Limit</button>
+
                     <?php
-                    if ($expenseLimit != NULL) echo '<div style="color:#2ecc71;font-weight:bold;padding-left:5px;">Current Expense limit:- ₹' . $expenseLimit . '</div>';
-                    else echo '<div style="color:red;font-weight:bold;padding-left:5px;">No limit set yet!</div>';
+                    if ($expenseLimit != NULL)
+                        echo '<div style="color:#2ecc71;font-weight:bold;padding-left:5px;">Current Expense limit:- ₹' . $expenseLimit . '</div>';
+                    else
+                        echo '<div style="color:red;font-weight:bold;padding-left:5px;">No limit set yet!</div>';
                     echo '
            <div class="modal" id="modal_exp_limit" data-animation="slideInOutLeft">
                <div class="modal-dialog">
@@ -124,7 +129,6 @@ if (isset($_SESSION['id'])) {
                     $result = mysqli_query($con, $sql);
                     if (mysqli_num_rows($result) > 0) {
                         echo '<div class="title">
-                            <i class="uil uil-rupee-sign"></i>
                             <span class="text">Expenses</span>
                         </div>
     
@@ -148,7 +152,7 @@ if (isset($_SESSION['id'])) {
                             $expenseAmount = $row['expense_amount'];
                             $date_added = $row['date_added'];
                             // Delete expense Modal(Also getting the expense id to delete that expense)
-
+                    
                             echo '
                                 <div class="modal" id="modal_' . $expense_Id . '"data-animation="slideInOutLeft">
                                     <div class="modal-dialog">
@@ -238,7 +242,19 @@ if (isset($_SESSION['id'])) {
         </div>
 
     </section>
+    <script>
+        let buttons = document.querySelectorAll("button");
+        let i = document.querySelectorAll("i");
 
+        for (let k = 0; k < buttons.length; k++) {
+            if (buttons[k].getAttribute("data-open") === "true") {
+                for (let j = 0; j < i.length; j++) { // Fix the condition here
+                    i[j].style.opacity = 0.4;
+                }
+            }
+        }
+
+    </script>
     <script src="../assets/js/script.js"></script>
     <script src="../assets/js/modal.js"></script>
 
