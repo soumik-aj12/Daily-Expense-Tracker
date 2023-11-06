@@ -218,7 +218,9 @@ if (isset($_SESSION['id'])) {
                                         <div class="input-group">
                                             <label for="phone">Phone</label>';
                 if ($phone != 0) {
-                    echo '<input type="number" id="phone" name="phone" value="' . $phone . '" required>';
+                    echo '<input type="tel" id="phone" name="phone" pattern="[0-9]{10}"
+                    title="Phone number must be 10 digits" value="' . $phone . '" required>';
+                    
                 }
                 echo '</div>
                                         
