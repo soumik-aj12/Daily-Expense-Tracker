@@ -12,7 +12,7 @@ if (isset($_POST['g-recaptcha-response'])) {
     // Check if the response is valid
     if (intval($responseKeys["success"]) !== 1) {
         // reCAPTCHA verification failed, handle accordingly (e.g., show an error message).
-         header("Location: form.php#login?captcha=false");
+         header("Location: form.php?message=captcha_error");
     }
     else{
         unset($_POST['g-recaptcha-response']);
@@ -31,7 +31,7 @@ if (isset($_POST['g-recaptcha-response'])) {
                 $_SESSION['loggedin'] = true;
                 echo "<script>window.location.href='dashboard/dashboard.php';</script>";
             } else {
-                echo 'login failed';
+                header("Location: form.php?message=incorrect");
             }
         }
     }

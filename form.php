@@ -23,7 +23,7 @@ include 'connectDB.php';
         <ul class="nav-items">
             <li><a href="index.php">Home</a></li>
             <li><a href="form.php" class="active">Login/Signup</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="about.php">About</a></li>
         </ul>
     </nav>
 
@@ -55,18 +55,20 @@ include 'connectDB.php';
                     </div>
                     <div class="field-wrap" id='captcha'>
                         <div class="g-recaptcha" data-sitekey="6LdJChcoAAAAAKoLQFs5IkQ6sH3wWMr6OhU7le4-"></div>
-                        <?php
-                        if (isset($_GET['captcha'])) {
-                            echo "<span style='color:red;'>Please verify the captcha!</span>";
-                            unset($_GET['captcha']);
-                        }
-
-                        ?>
                     </div>
 
                     <button class="button button-block" name='log_sub'>Log In</button>
 
                 </form>
+                <?php if (isset($_GET['message']) && $_GET['message'] == "incorrect") {
+                    echo "<p style='color:red;margin-bottom:-2px;text-align: center;'>Incorrect Email/Password</p>";
+                    unset($_GET['message']);
+                } else if(isset($_GET['message']) && $_GET['message']=="captcha_error"){
+                    echo "<p style='color:red;margin-bottom:-2px;text-align: center;'>Please verify the captcha!</p>";
+                    unset($_GET['message']);
+                }
+                
+                ?>
                 <div class="modal" id="modal_del_user" data-animation="slideInOutLeft">
                     <div class="modal-dialog">
                         <header class="modal-header">
@@ -174,6 +176,7 @@ include 'connectDB.php';
         </div><!-- tab-content -->
 
     </div> <!-- /form -->
+
     <?php if (isset($_GET['message']) && $_GET['message'] == 6006) { ?>
         <script>
             swal({
@@ -184,6 +187,7 @@ include 'connectDB.php';
         </script>
         <?php unset($_GET['message']);
     } ?>
+
 
     <?php if (isset($_GET['message']) && $_GET['message'] == 4004) { ?>
         <script>
