@@ -8,7 +8,7 @@ if (isset($_SESSION['id'])) {
     $row = mysqli_fetch_assoc($result);
     // print_r($row);
 } else {
-    echo "<script>window.location.href='../login.php';</script>";
+    echo "<script>window.location.href='../form.php';</script>";
 }
 ?>
 <!DOCTYPE html>

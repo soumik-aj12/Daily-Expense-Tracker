@@ -44,14 +44,16 @@ include 'connectDB.php';
                         <label>
                             Email Address<span class="req">*</span>
                         </label>
-                        <input type="email" required name='log_email' autocomplete="off" />
+                        <input type="email" required name='log_email' autocomplete="off" readonly
+                            onfocus="this.removeAttribute('readonly');" />
                     </div>
 
                     <div class="field-wrap">
                         <label>
                             Password<span class="req">*</span>
                         </label>
-                        <input type="password" required name='log_pass' autocomplete="off" />
+                        <input type="password" required name='log_pass' autocomplete="off" readonly
+                            onfocus="this.removeAttribute('readonly');" />
                     </div>
                     <div class="field-wrap" id='captcha'>
                         <div class="g-recaptcha" data-sitekey="6LdJChcoAAAAAKoLQFs5IkQ6sH3wWMr6OhU7le4-"></div>
@@ -63,11 +65,11 @@ include 'connectDB.php';
                 <?php if (isset($_GET['message']) && $_GET['message'] == "incorrect") {
                     echo "<p style='color:red;margin-bottom:-2px;text-align: center;'>Incorrect Email/Password</p>";
                     unset($_GET['message']);
-                } else if(isset($_GET['message']) && $_GET['message']=="captcha_error"){
+                } else if (isset($_GET['message']) && $_GET['message'] == "captcha_error") {
                     echo "<p style='color:red;margin-bottom:-2px;text-align: center;'>Please verify the captcha!</p>";
                     unset($_GET['message']);
                 }
-                
+
                 ?>
                 <div class="modal" id="modal_del_user" data-animation="slideInOutLeft">
                     <div class="modal-dialog">
@@ -79,7 +81,7 @@ include 'connectDB.php';
                         </header>
                         <section class="modal-content">
                             <div class="form-div">
-                                <form action="otp.php" method="post">
+                                <form action="otp.php" method="post" autocomplete="off">
                                     <input type="email" id="email" name="otp_email" placeholder="Enter your email:-">
                                     <button type="submit" class="btn" name="confirm_email">Confirm</button>
                                 </form>
@@ -107,14 +109,16 @@ include 'connectDB.php';
                             <label>
                                 First Name<span class="req">*</span>
                             </label>
-                            <input type="text" required autocomplete="off" name='fname' />
+                            <input type="text" required autocomplete="off" name='fname' readonly
+                                onfocus="this.removeAttribute('readonly');" />
                         </div>
 
                         <div class="field-wrap">
                             <label>
                                 Last Name<span class="req">*</span>
                             </label>
-                            <input type="text" required autocomplete="off" name='lname' />
+                            <input type="text" required autocomplete="off" name='lname' readonly
+                                onfocus="this.removeAttribute('readonly');" />
                         </div>
                     </div>
 
@@ -122,7 +126,8 @@ include 'connectDB.php';
                         <label>
                             Email Address<span class="req">*</span>
                         </label>
-                        <input type="email" required name='sign_email' />
+                        <input type="email" required name='sign_email' readonly
+                            onfocus="this.removeAttribute('readonly');" />
                         <?php
                         if (isset($_GET['error']) && $_GET['error'] == "error1") {
                             echo '<script>
@@ -140,7 +145,7 @@ include 'connectDB.php';
                             Phone
                         </label>
                         <input type="tel" id="phone" name="phone" pattern="[0-9]{10}"
-                            title="Phone number must be 10 digits">
+                            title="Phone number must be 10 digits" readonly onfocus="this.removeAttribute('readonly');">
 
                     </div>
 
@@ -148,12 +153,13 @@ include 'connectDB.php';
                         <label id="pwd">
                             Password<span class="req">*</span>
                         </label>
-                        <input type="password" required name='sign_pass' autocomplete="off" />
+                        <input type="password" required name='sign_pass' autocomplete="off" readonly
+                            onfocus="this.removeAttribute('readonly');" />
                         <span id="pass_error"></span>
 
                     </div>
                     <div class="field-wrap">
-                        <label>
+                        <label id="cpwd">
                             Confirm Password<span class="req">*</span>
                         </label>
                         <input type="password" required autocomplete="off" name='cpass' />
@@ -166,6 +172,8 @@ include 'connectDB.php';
                             echo "<p id='error_p' style='color:red;margin-bottom:-2px;'>Your passwords do not match!</p>";
                         }
                         ?>
+                        <span id="cpass_error"></span>
+
                     </div>
 
                     <button type="submit" class="button button-block" id="sign_sub" name='sign_sub'>Signup</button>
@@ -202,6 +210,8 @@ include 'connectDB.php';
     <script>
         var email = document.querySelector('input[name="sign_email"]');
         var password = document.querySelector('input[name="sign_pass"]');
+        var cpassword = document.querySelector('input[name="cpass"]');
+
 
         // Regular expression for email validation
         var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -234,10 +244,29 @@ include 'connectDB.php';
 
             }
         }
+        function noMatchPassword() {
+            // Validate password
+            var error = document.querySelector('#cpass_error');
+            if (password.value != cpassword.value && password.value != "" && cpassword.value != "") {
+                error.style.color = 'red';
+                error.textContent = 'Passwords do not match!';
+                document.getElementById('cpwd').textContent = "";
+                document.querySelector('#sign_sub').disabled = true;
+
+            } else {
+                error.textContent = '';
+                document.getElementById('cpwd').textContent = "Confirm Password";
+                document.querySelector('#sign_sub').disabled = false;
+
+
+            }
+        }
 
         // Attach the validation function to the input event
         email.addEventListener('input', validateEmail);
         password.addEventListener('input', validatePassword);
+        cpassword.addEventListener('input', noMatchPassword);
+
         // Check if the URL contains the 'captcha' parameter
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('captcha')) {

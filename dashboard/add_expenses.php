@@ -22,7 +22,7 @@
                     </div>
                     <div class="input-group">
                         <label for="expense-amount">Expense Amount ($)</label>
-                        <input type="number" id="expense-amount" name='expense_amount' required>
+                        <input type="number" id="expense-amount" name='expense_amount' min="1" max="100000" required>
                     </div>
                     <?php
                     $today = date("Y-m-d");

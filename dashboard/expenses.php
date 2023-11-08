@@ -9,7 +9,7 @@ if (isset($_SESSION['id'])) {
     $expenseLimit = $row['expense_limit'];
     // print_r($row);
 } else {
-    echo "<script>window.location.href='../login.php';</script>";
+    echo "<script>window.location.href='../form.php';</script>";
 }
 ?>
 <!DOCTYPE html>
@@ -111,7 +111,7 @@ if (isset($_SESSION['id'])) {
                            <div class="input-group">
                                <label for="expense-name">Expense Limit</label>
                                
-                               <input type="number" id="expense-name" name="expense_limit"required>
+                               <input type="number" id="expense-name" name="expense_limit" min="100" max="100000" required>
                            </div>
                            <input type="hidden" name="id" value="' . $id . '">
                            <button type="submit" name="expense_lim_btn">Update Expense</button>
@@ -152,7 +152,6 @@ if (isset($_SESSION['id'])) {
                             $expenseAmount = $row['expense_amount'];
                             $date_added = $row['date_added'];
                             // Delete expense Modal(Also getting the expense id to delete that expense)
-                    
                             echo '
                                 <div class="modal" id="modal_' . $expense_Id . '"data-animation="slideInOutLeft">
                                     <div class="modal-dialog">
@@ -198,7 +197,7 @@ if (isset($_SESSION['id'])) {
                                         </div>
                                         <div class="input-group">
                                             <label for="expense-amount">Expense Amount ($)</label>
-                                            <input type="number" id="expense-amount" name="expense_amount" value="' . $expenseAmount . '"required>
+                                            <input type="number" id="expense-amount" name="expense_amount" value="' . $expenseAmount . '" min="1" max="100000" required>
                                         </div>
                                         <input type="hidden" name="expense_id" value="' . $row['expense_id'] . '">
                                         <button type="submit" class="btn">Update Expense</button>
@@ -243,16 +242,7 @@ if (isset($_SESSION['id'])) {
 
     </section>
     <script>
-        let buttons = document.querySelectorAll("button");
-        let i = document.querySelectorAll("i");
-
-        for (let k = 0; k < buttons.length; k++) {
-            if (buttons[k].getAttribute("data-open") === "true") {
-                for (let j = 0; j < i.length; j++) { // Fix the condition here
-                    i[j].style.opacity = 0.4;
-                }
-            }
-        }
+        
 
     </script>
     <script src="../assets/js/script.js"></script>

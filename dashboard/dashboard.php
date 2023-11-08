@@ -476,7 +476,7 @@ if (isset($_SESSION['id'])) {
 
         });
     </script>
-    <script src="script.js"></script>
+    <script src="../assets/js/script.js"></script>
 
 </body>
 
