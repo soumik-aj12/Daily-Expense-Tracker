@@ -93,9 +93,9 @@ if (isset($_SESSION['id'])) {
                         Limit</button>
 
                     <?php
-                    if ($expenseLimit != NULL)
-                        echo '<div style="color:#2ecc71;font-weight:bold;padding-left:5px;">Current Expense limit:- ₹' . $expenseLimit . '</div>';
-                    else
+                    if ($expenseLimit != NULL) {
+                        echo '<div style="color:#2ecc71;font-weight:bold;padding-left:5px;margin-bottom: 10px;">Current Expense limit:- ₹' . $expenseLimit . '</div>';
+                    } else
                         echo '<div style="color:red;font-weight:bold;padding-left:5px;">No limit set yet!</div>';
                     echo '
            <div class="modal" id="modal_exp_limit" data-animation="slideInOutLeft">
@@ -111,7 +111,7 @@ if (isset($_SESSION['id'])) {
                            <div class="input-group">
                                <label for="expense-name">Expense Limit</label>
                                
-                               <input type="number" id="expense-name" name="expense_limit" min="100" max="100000" required>
+                               <input type="number" name="expense_limit" min="100" max="100000" required>
                            </div>
                            <input type="hidden" name="id" value="' . $id . '">
                            <button type="submit" name="expense_lim_btn">Update Expense</button>
@@ -120,6 +120,30 @@ if (isset($_SESSION['id'])) {
                </div>
            </div>
    ';
+                    echo '
+                <div class="modal" id="modal_exp_delete" data-animation="slideInOutLeft">
+                                    <div class="modal-dialog">
+                                        <header class="modal-header">
+                                            <h3>Delete Expense</h3>
+                                            <button class="close-modal" aria-label="close modal" data-close>
+                                                ✕
+                                            </button>
+                                        </header>
+                                        <section class="modal-content">
+                                            <div style="margin-bottom: 20px;">Are you sure you want to delete all expense?</div>
+                                            <div class="form-div">
+                                            <form action="delete_all_exp.php" method="post">
+                                                <input type="hidden" name="delete-user-id" value="' . $id . '">
+                                                <button type="submit" class="btn" name="delete-all-exp-btn">Yes</button>
+                                                </form>
+                                                <button class="close-modal" aria-label="close modal" data-close>
+                                                No
+                                            </button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                ';
                     ?>
                 </div>
 
@@ -128,7 +152,9 @@ if (isset($_SESSION['id'])) {
                     $sql = "SELECT * FROM expenses WHERE user_id = '$id'";
                     $result = mysqli_query($con, $sql);
                     if (mysqli_num_rows($result) > 0) {
-                        echo '<div class="title">
+                        echo '
+                    <button type="button" class="edit-profile-btn open-modal" data-open="modal_exp_delete">Delete All Expense</button>
+                    <div class="title">
                             <span class="text">Expenses</span>
                         </div>
     
@@ -193,14 +219,14 @@ if (isset($_SESSION['id'])) {
                                         </div>
                                         <div class="input-group">
                                             <label for="expense-name">Expense Type</label>
-                                            <input type="text" id="expense-name" name="expense_type" value="' . $expenseType . '"required>
+                                            <input type="text" id="upd-expense-type" name="expense_type" value="' . $expenseType . '"required>
                                         </div>
                                         <div class="input-group">
                                             <label for="expense-amount">Expense Amount ($)</label>
                                             <input type="number" id="expense-amount" name="expense_amount" value="' . $expenseAmount . '" min="1" max="100000" required>
                                         </div>
                                         <input type="hidden" name="expense_id" value="' . $row['expense_id'] . '">
-                                        <button type="submit" class="btn">Update Expense</button>
+                                        <button type="submit" class="btn" id="update-exp-btn">Update Expense</button>
                                     </form>
                                 </section>
                             </div>
@@ -241,10 +267,7 @@ if (isset($_SESSION['id'])) {
         </div>
 
     </section>
-    <script>
-        
 
-    </script>
     <script src="../assets/js/script.js"></script>
     <script src="../assets/js/modal.js"></script>
 

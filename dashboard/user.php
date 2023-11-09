@@ -220,12 +220,13 @@ if (isset($_SESSION['id'])) {
                 if ($phone != 0) {
                     echo '<input type="tel" id="phone" name="phone" pattern="[0-9]{10}"
                     title="Phone number must be 10 digits" value="' . $phone . '" required>';
-                    
+
                 }
                 echo '</div>
                                         
                                         <input type="hidden" name="update-user-id" value="' . $id . '">
-                                        <button type="submit" class="btn" name="update-user-btn">Update User</button>
+                                        <button type="submit" class="btn" name="update-user-btn" id="update-user-btn">Update User</button>
+                                        <span id="name_error"><span>
                                     </form>
                                     </div>
                                 </section>
@@ -266,6 +267,24 @@ if (isset($_SESSION['id'])) {
     } ?>
 
     <script>
+        var fname = document.querySelector('input[name="fname"]');
+        var lname = document.querySelector('input[name="lname"]');
+        var error = document.querySelector('#name_error');
+        var numberRegex = /\d/;
+
+        function validateName() {
+            if (numberRegex.test(fname.value) || numberRegex.test(lname.value)) {
+                error.style.color = 'red';
+                error.textContent = 'Name cannot contain numbers!';
+                document.querySelector('#update-user-btn').disabled = true;
+            } else {
+                error.textContent = '';
+                document.querySelector('#update-user-btn').disabled = false;
+            }
+        }
+
+        fname.addEventListener('input', validateName);
+        lname.addEventListener('input', validateName);
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('message')) {
             setTimeout(() => {

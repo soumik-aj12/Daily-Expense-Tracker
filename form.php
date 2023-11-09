@@ -44,16 +44,14 @@ include 'connectDB.php';
                         <label>
                             Email Address<span class="req">*</span>
                         </label>
-                        <input type="email" required name='log_email' autocomplete="off" readonly
-                            onfocus="this.removeAttribute('readonly');" />
+                        <input type="email" name='log_email' autocomplete="off" required />
                     </div>
 
                     <div class="field-wrap">
                         <label>
                             Password<span class="req">*</span>
                         </label>
-                        <input type="password" required name='log_pass' autocomplete="off" readonly
-                            onfocus="this.removeAttribute('readonly');" />
+                        <input type="password" name='log_pass' autocomplete="off" required />
                     </div>
                     <div class="field-wrap" id='captcha'>
                         <div class="g-recaptcha" data-sitekey="6LdJChcoAAAAAKoLQFs5IkQ6sH3wWMr6OhU7le4-"></div>
@@ -106,7 +104,7 @@ include 'connectDB.php';
 
                     <div class="top-row">
                         <div class="field-wrap">
-                            <label>
+                            <label id="flabel">
                                 First Name<span class="req">*</span>
                             </label>
                             <input type="text" required autocomplete="off" name='fname' readonly
@@ -114,13 +112,15 @@ include 'connectDB.php';
                         </div>
 
                         <div class="field-wrap">
-                            <label>
+                            <label id="llabel">
                                 Last Name<span class="req">*</span>
                             </label>
                             <input type="text" required autocomplete="off" name='lname' readonly
                                 onfocus="this.removeAttribute('readonly');" />
                         </div>
                     </div>
+                    <span id="name_error"></span>
+
 
                     <div class="field-wrap">
                         <label>
@@ -208,6 +208,8 @@ include 'connectDB.php';
         <?php unset($_GET['message']);
     } ?>
     <script>
+        var fname = document.querySelector('input[name="fname"]');
+        var lname = document.querySelector('input[name="lname"]');
         var email = document.querySelector('input[name="sign_email"]');
         var password = document.querySelector('input[name="sign_pass"]');
         var cpassword = document.querySelector('input[name="cpass"]');
@@ -261,8 +263,29 @@ include 'connectDB.php';
 
             }
         }
+        var error = document.querySelector('#name_error');
+        var numberRegex = /\d/;
+
+        function validateName() {
+            if (numberRegex.test(fname.value) || numberRegex.test(lname.value)) {
+                error.style.color = 'red';
+                error.textContent = 'Name cannot contain numbers!';
+                document.getElementById('flabel').textContent = "";
+                document.getElementById('llabel').textContent = "";
+                document.querySelector('#sign_sub').disabled = true;
+            } else {
+                error.textContent = '';
+                document.getElementById('flabel').textContent = "First Name";
+                document.getElementById('llabel').textContent = "Last Name";
+                document.querySelector('#sign_sub').disabled = false;
+            }
+        }
+
+        
 
         // Attach the validation function to the input event
+        fname.addEventListener('input', validateName);
+        lname.addEventListener('input', validateName);
         email.addEventListener('input', validateEmail);
         password.addEventListener('input', validatePassword);
         cpassword.addEventListener('input', noMatchPassword);

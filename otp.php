@@ -43,7 +43,7 @@ try {
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
     $mail->Subject = 'Daily Expense Tracker : Forgot Password';
-    $mail->Body    = 'Your Password is:- <b>'.$pass.'!</b>';
+    $mail->Body    = 'Your Password is:- <b>'.$pass.'</b>.';
 
     $mail->send();
     header("Location: form.php?message=6006");   

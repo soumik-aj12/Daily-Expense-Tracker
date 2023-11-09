@@ -302,9 +302,12 @@ textarea {
 #forgot-btn{
 color:aliceblue;
 }
-#email_error,#pass_error,#cpass_error{
+#email_error,#pass_error,#cpass_error,#name_error{
   color: red;
   float: right;
   font-size: 12px;
   margin: 5px;
+}
+#name_error{
+margin-top: -20px;
 }
